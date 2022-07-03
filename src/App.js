@@ -1,5 +1,7 @@
 import './App.css';
 import * as React from 'react';
+import SignIn from './Login';
+
 import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -8,6 +10,7 @@ import Typography from '@mui/material/Typography';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+
 
 import { GiBrute } from "react-icons/gi";
 
@@ -18,6 +21,7 @@ const theme = createTheme();
 const App = () => {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [selectedServer, setSelectedServer] = React.useState("Select Server");
+  const [isLogined, setIsLogined] = React.useState(null);
   const open = Boolean(anchorEl);
   
 
@@ -35,56 +39,22 @@ const App = () => {
     console.log("selected server is " +  serverName);
   }
 
-  const serverSelectMenu = () => {
+
+  const Login = () => {
     return (
-      <div>
-        <Button
-          variant="contained"
-          id="basic-button"
-          aria-controls = {open ? 'basic-menu' : undefined}
-          aria-haspopup = "true"
-          aria-expanded = {open ? 'true' : undefined}
-          onClick={handleClick}
-        >
-          {selectedServer}
-        </Button>
-        <Menu
-          id="basic-menu"
-          anchorEl={anchorEl}
-          open={open}
-          onClose={handleClose}
-          MenuListProps={{
-            'aria-labelledby' : 'basic-button',
-          }}
-        >
-          <MenuItem onClick={handleClose} data-server-name="슈시아">슈시아</MenuItem>
-          <MenuItem onClick={handleClose} data-server-name="샤일록">샤일록</MenuItem>
-          <MenuItem onClick={handleClose} data-server-name="칸나">칸나</MenuItem>
-          <MenuItem onClick={handleClose} data-server-name="오필리아">오필리아</MenuItem>
-          <MenuItem onClick={handleClose} data-server-name="아이리스">아이리스</MenuItem>
-          <MenuItem onClick={handleClose} data-server-name="젤딘">젤딘</MenuItem>
-          <MenuItem onClick={handleClose} data-server-name="민타이">민타이</MenuItem>
-          <MenuItem onClick={handleClose} data-server-name="패리스">패리스</MenuItem>
-        </Menu>
-        <Button
-          id="basic-button"
-        >
-          Join
-        </Button>
-      </div>
+      <div></div>
     )
   }
-
 
   return (
     <div>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <Container component="main" maxWidth="s" sx={{backgroundColor:'white'}}>
+        <Container component="main" maxWidth="xs" sx={{backgroundColor:'white'}}>
 
           <Box
             sx={{
-              marginTop:12,
+              marginTop:2,
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'center',
@@ -96,8 +66,9 @@ const App = () => {
             <Typography id="mainTitleText" component="h1" variant="h3" >
               ouraid
             </Typography>
-          </Box>
-          
+            <label>beta</label>
+            </Box>
+            
           <Box
             sx={{
               display: 'flex',
@@ -108,7 +79,7 @@ const App = () => {
             }}>
             <Box
               sx={{
-                marginTop:4,
+                marginTop:1,
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
@@ -119,7 +90,8 @@ const App = () => {
                 //backgroundColor: 'ivory',
               }}
             >
-              {serverSelectMenu()}
+              {<SignIn/>}
+              {/* {isLogined !== null ? serverSelectMenu() : SignIn({isLogined:isLogined, setIsLogined:setIsLogined})} */}
             </Box>
           </Box>
 
