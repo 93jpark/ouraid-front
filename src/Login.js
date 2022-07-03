@@ -12,17 +12,23 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { AirlineSeatReclineExtra } from '@mui/icons-material';
 
 const theme = createTheme();
 
-export default function SignIn() {
+const SignIn = ( {isLogined, setIsLogined} ) => {
+
   const handleSubmit = (event) => {
+    console.log(isLogined);
+    setIsLogined(true);
+    alert("clicked");
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     console.log({
       email: data.get('email'),
       password: data.get('password'),
     });
+    
   };
 
   return (
@@ -31,27 +37,30 @@ export default function SignIn() {
         <CssBaseline />
         <Box
           sx={{
-            marginTop: 8,
+            marginTop: 1,
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
           }}
         >
             
-          
+          {/*
           <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
             <LockOutlinedIcon />
           </Avatar>
+           */}
+          {/*
           <Typography component="h1" variant="h5">
             Sign in
           </Typography>
+          */}
           <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
             <TextField
               margin="normal"
               required
               fullWidth
               id="email"
-              label="Email Address"
+              label="이메일"
               name="email"
               autoComplete="email"
               autoFocus
@@ -61,34 +70,37 @@ export default function SignIn() {
               required
               fullWidth
               name="password"
-              label="Password"
+              label="비밀번호"
               type="password"
               id="password"
               autoComplete="current-password"
             />
+            {/*
             <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
               label="Remember me"
-            />
+            />*/}
             <Button
               type="submit"
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
             >
-              Sign In
+              로그인
             </Button>
-            <Grid container>
-              <Grid item xs>
-                <Link href="#" variant="body2">
-                  Forgot password?
-                </Link>
-              </Grid>
+            <Grid container justifyContent={"space-evenly"}>
               <Grid item>
-                <Link href="#" variant="body2">
-                  {"Don't have an account? Sign Up"}
+                <Link href="#" variant="body1" >
+                  비밀번호 찾기
                 </Link>
               </Grid>
+              
+              <Grid item>
+                <Link href="./signup" variant="body1">
+                  회원가입
+                </Link>
+              </Grid>
+
             </Grid>
           </Box>
         </Box>
@@ -96,3 +108,5 @@ export default function SignIn() {
     </ThemeProvider>
   );
 }
+
+export default SignIn;
