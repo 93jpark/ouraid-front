@@ -2,6 +2,8 @@ import './App.css';
 import * as React from 'react';
 import SignIn from './Login';
 
+import Grid from '@mui/material/Grid';
+
 import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -63,10 +65,17 @@ const App = () => {
           >
             {/*<GroupsIcon sx={{width:60, height:60}}></GroupsIcon>*/}
             <GiBrute size={200} color='#2278CF' />
-            <Typography id="mainTitleText" component="h1" variant="h3" >
-              ouraid
-            </Typography>
-            <label>beta</label>
+            <Grid item sx={{
+              display: 'flex',
+              flexDirection: 'row',
+              alignItems: 'flex-end'
+              
+            }}>
+              <Typography id="mainTitleText" component="h1" variant="h3" >
+                ouraid
+              </Typography>
+              <Typography sx={{ fontWeight: 'light', fontStyle: 'oblique', lineHeight: 2.2, fontSize: 12 }}>beta</Typography>
+            </Grid>
             </Box>
             
           <Box
