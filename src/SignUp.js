@@ -1,6 +1,8 @@
 import * as React from 'react';
 import CharInfoForm from './SignUp/CharInfoForm';
 import ServerSelect from './SignUp/ServerSelect';
+import CharInfo from './SignUp/CharInfo';
+import _CharInfo from './SignUp/_CharInfo';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -13,30 +15,32 @@ import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
+import Paper from '@mui/material/Paper';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Divider from '@mui/material/Divider';
 
 
-import Menu from '@mui/material/Menu';
 
-import AddCircleOutlineOutlinedIcon from '@mui/icons-material/AddCircleOutlineOutlined';
-import AddBoxOutlinedIcon from '@mui/icons-material/AddBoxOutlined';
-import { GiCharacter } from "react-icons/gi";
-import { BsFillPersonPlusFill } from "react-icons/bs";
-import { GrUserAdd } from "react-icons/gr";
-import { HiOutlineUserAdd } from "react-icons/hi";
-import { IoPersonAddOutline } from "react-icons/io5";
-import { MdGroupAdd } from "react-icons/md";
-import { VscDiffAdded, VscAdd } from "react-icons/vsc";
+// import Menu from '@mui/material/Menu';
+
+// import AddCircleOutlineOutlinedIcon from '@mui/icons-material/AddCircleOutlineOutlined';
+// import AddBoxOutlinedIcon from '@mui/icons-material/AddBoxOutlined';
+// import { GiCharacter } from "react-icons/gi";
+// import { BsFillPersonPlusFill } from "react-icons/bs";
+// import { GrUserAdd } from "react-icons/gr";
+// import { HiOutlineUserAdd } from "react-icons/hi";
+// import { IoPersonAddOutline } from "react-icons/io5";
+// import { MdGroupAdd } from "react-icons/md";
+// import { VscDiffAdded, VscAdd } from "react-icons/vsc";
 
 
-import { styled } from '@mui/material/styles';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
-import NativeSelect from '@mui/material/NativeSelect';
-import InputBase from '@mui/material/InputBase';
+// import { styled } from '@mui/material/styles';
+// import InputLabel from '@mui/material/InputLabel';
+// import MenuItem from '@mui/material/MenuItem';
+// import FormControl from '@mui/material/FormControl';
+// import Select from '@mui/material/Select';
+// import NativeSelect from '@mui/material/NativeSelect';
+// import InputBase from '@mui/material/InputBase';
 // import DnfClass from './DnfClass';
 
 
@@ -45,6 +49,7 @@ const theme = createTheme();
 
 
 const SignUp = () => {
+
 
     const [fulfillment, setFulfillment] = React.useState(false); // 유저정보 입력창 확인여부
     const [ability, setAbility] = React.useState(1.0); // 항마
@@ -60,7 +65,8 @@ const SignUp = () => {
     const [userServer, setUserServer] = React.useState();
     const [isKorean, setIsKorean] = React.useState(false); // 한국인 여부
 
-    const [userCharacters, setUserCharacters] = React.useState(new Map);
+    //const [userCharacters, setUserCharacters] = React.useState(new Map);
+    const [userCharacters, setUserCharacters] = React.useState([]);
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -115,11 +121,20 @@ const SignUp = () => {
     }
 
     const addUserCharactersHandler = (newCharacter) => {
+        //const _newCharacters = new Map(userCharacters);
+        const _newCharacters = [];
+        _newCharacters.push(...userCharacters);
         const newChar = newCharacter;
-        const presentCharacters = userCharacters;
-        presentCharacters.set(newChar.charName, newChar);
-        setUserCharacters(presentCharacters);
+        //const presentCharacters = userCharacters;
+        _newCharacters.push(newChar)
+        //presentCharacters.set(newChar.charName, newChar);
+        setUserCharacters(_newCharacters);
+        console.log(userCharacters);
+    }
 
+    const delUserCharacterHandler = (delChar) => {
+        console.log("want to delete charter..")
+        console.log(delChar)
     }
 
     const userInputComponent = () => {
@@ -203,52 +218,51 @@ const SignUp = () => {
 
     const charInputComponent = () => {
         return (
-            <>
-                <Grid container spacing={1}>
-                    <Grid item xs={12}>
-                        <Grid container justifyContent="center">
-                            <Box component="form" noValidate sx={{ m: 1 }} justifyContent="center">
-                                <Box sx={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
+            <Grid container spacing={1}>
+                {/* <Grid item xs={12}> */}
+                    {/* <Box component="form" noValidate sx={{ m: 1 }} justifyContent="center"> */}
 
+                        <Grid item sx={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }} sm={12}>
 
+                            <Grid item sx={{ mb: 2 }}>
+                                <ServerSelect userServerSelectHandler={userServerSelectHandler}></ServerSelect>
+                            </Grid>
+                            {/* <Divider m="1" variant="middle" /> */}
 
-                                    <ServerSelect userServerSelectHandler={userServerSelectHandler}></ServerSelect>
+                            <Grid item sx={{ mb: 2 }} xs={12}>
+                                {/* 등록된 캐릭터 목록 */}
+                                {/* <Paper sx={{ p:2, display:'flex', flexDirection: 'column' }}> */}
+                                {userCharacters.length === Number.parseInt('0') ? "등록된 캐릭터가 없습니다." : <CharInfo userCharacters={userCharacters} delUserCharacterHandler={delUserCharacterHandler} />}
 
-                                    <Divider m="1" variant="middle" />
+                                {/* </Paper> */}
+                            </Grid>
 
-                                    {/* {
-                                        DnfClass.userMainClass.map((name, index) => {
-                                            return (
-                                                <option key={index + "" + name} value={index}>{name}</option>
-                                            )
-                                        })
-                                    } */}
+                            <Grid item>
+                                {/* 캐릭터 등록 폼 */}
+                                <CharInfoForm classSelectHandler={classSelectHandler} addUserCharactersHandler={addUserCharactersHandler} charCount={userCharacters.length} ></CharInfoForm>
+                            </Grid>
 
-                                    <CharInfoForm classSelectHandler={classSelectHandler} addUserCharactersHandler={addUserCharactersHandler}></CharInfoForm>
-
-
-                                    {/* 가입하기 버튼 */}
-                                    <Grid item xs={12} sx={{ display: "flex", flexDirection: "row", justifyContent: "center", alignItems: "center" }} >
-                                        <Button
-                                            type="submit"
-                                            variant="contained"
-                                            onClick={handleSubmit}
-                                            sx={{ mt: 5, mb: 2, minWidth: 200, width: 300 }}>
-                                            가입하기
-                                        </Button>
-                                    </Grid>
-                                </Box>
-                            </Box>
+                            {/* 가입하기 버튼 */}
+                            <Grid item xs={12} sx={{ display: "flex", flexDirection: "row", justifyContent: "center", alignItems: "center" }} >
+                                <Button
+                                    type="submit"
+                                    variant="contained"
+                                    onClick={handleSubmit}
+                                    sx={{ mt: 3, mb: 2, minWidth: 200, width: 300 }}>
+                                    가입하기
+                                </Button>
+                            </Grid>
                         </Grid>
-                    </Grid>
-                </Grid>
-            </>
+                        
+                    {/* </Box> */}
+                {/* </Grid> */}
+            </Grid>
         )
     }
 
     return (
         <ThemeProvider theme={theme}>
-            <Container component="main" maxWidth="xs">
+            <Container component="main" maxWidth="xl">
                 <CssBaseline />
                 <Grid
                     sx={{
@@ -275,6 +289,7 @@ const SignUp = () => {
 
                         {/* {userInputComponent()} */}
                         {fulfillment ? charInputComponent() : userInputComponent()}
+                        {/* {charInputComponent()} */}
 
                     </Grid>
                 </Grid>
