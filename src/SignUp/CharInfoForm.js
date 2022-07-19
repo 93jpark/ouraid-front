@@ -9,10 +9,10 @@ import Box from '@mui/material/Box';
 import DnfClass from '../DnfClass';
 import Button from '@mui/material/Button';
 
-function CharInfoForm({ classSelectHandler, addUserCharactersHandler }) {
+function CharInfoForm({ charCount, classSelectHandler, addUserCharactersHandler }) {
     const [userMainClass, setUserMainClass] = React.useState("male_ghost_knight");
-    const [userSubClass, setUserSubClass] = React.useState("male_ghost_knight");
-
+    const [userSubClass, setUserSubClass] = React.useState("soul_bringer");
+    const [korClassName, setKorClassName] = React.useState("소울브링어");
 
     console.log("DnfClass:" + DnfClass);
     console.log(userMainClass);
@@ -28,11 +28,23 @@ function CharInfoForm({ classSelectHandler, addUserCharactersHandler }) {
 
 
     const subClassSelectHandler = (event) => {
-        console.log("selected");
-        console.log(event.target.value);
-        setUserSubClass(event.target.value);
-        console.log("sub:"+userSubClass);
+        //console.log("selected");
+        //console.log(event.target.value);
+        let _subClass = event.target.value;
+        setUserSubClass(_subClass);
+        korClassNameHandler(_subClass);
+        //console.log("sub:"+userSubClass);
         classSelectHandler(userMainClass, userSubClass);
+    }
+
+    const korClassNameHandler = (subClass) => {
+        let _kor = DnfClass[userMainClass].filter(function(x){
+            return x.value === subClass;
+        });
+        //console.log(_kor);
+        console.log(_kor[0].name);
+        setKorClassName(_kor[0].name);
+        
     }
 
 
@@ -53,24 +65,30 @@ function CharInfoForm({ classSelectHandler, addUserCharactersHandler }) {
         let _mainClass = userMainClass;
         let _subClass = userSubClass;
         let _charNote = document.getElementById("characterNoteInput").value;
+        console.log(DnfClass);
+        let _korClassName = korClassName;
         
         const newCharacter = {
+            id : charCount,
             charName : _charName,
             ability : _ability,
             guildName : _guildName,
             mainClass : _mainClass,
             subClass : _subClass,
-            charNote : _charNote
+            charNote : _charNote,
+            korClassName : _korClassName,
         }
         addUserCharactersHandler(newCharacter);
         
-        alert(_charName+"\n"+_ability+"\n"+_guildName+"\n"+_mainClass+"\n"+_subClass+"\n"+_charNote);
+        alert(charCount+"\n"+_charName+"\n"+_ability+"\n"+_guildName+"\n"+_mainClass+"\n"+_subClass+"\n"+_charNote+"\n"+_korClassName);
+        console.log("In CharInfoForm"+newCharacter);
+        console.log(newCharacter);
         clearAllInput();
     }
 
     const clearAllInput = () => {
         document.getElementById("characterNameInput").value = "";
-        document.getElementById("abilityInput").value = 0;
+        document.getElementById("abilityInput").value = "";
         document.getElementById("guildNameInput").value = "";
         setUserMainClass("male_ghost_knight");
         setUserSubClass("soul_bringer");
@@ -78,64 +96,80 @@ function CharInfoForm({ classSelectHandler, addUserCharactersHandler }) {
     }
 
     return (
-        <Grid container>
+        <React.Fragment>
             {/* 캐릭터 정보 입력창 */}
-            <Grid id="" item p={1} xs={12} mt={2} sx={{ display: "flex", flexDirection: "row", justifyContent: "center", alignItems: "center", alignContent: "space-between", border: '0.5px dashed lightgrey'}} >
-                <Grid item sx={{ display: "flex", flexDirection: "row", justifyContent: "center", alignItems: "center", alignContent: "space-between" }}>
-                    <TextField required id="characterNameInput" label="캐릭명" variant="standard" sx={{ mr: 1, width: 100 }} />
-                    <TextField required id="abilityInput" label="항마" variant="standard" sx={{ width: 70, mr: 1 }} type="number" defaultValue={0}
-                        inputProps={{ inputMode: 'decimal', step: "0.1", pattern: '[0-9].[0-9]' }} />
-                    <TextField required id="guildNameInput" label="길드명" variant="standard" sx={{ mr: 1, width: 100 }} />
+            <Grid container p={1} mt={2} sx={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", alignContent: "space-between", border: '1px dashed lightgrey'}} >
+
+                <Grid item>
+
+                    <Grid container direction='row' alignItems='center' style={{width:'100%', textAlign:'center' }}>
+                        <Grid item xs>
+                            <TextField required id="characterNameInput" label="캐릭명" variant="standard" sx={{ mr: 1 }} />
+                        </Grid>
+                        <Grid item xs>
+                            <TextField required id="abilityInput" label="항마" variant="standard" sx={{ mr: 1 }} type="number"
+                                inputProps={{ inputMode: 'decimal', step: "0.1", pattern: '[0-9].[0-9]' }} />
+                            
+                        </Grid>
+                        <Grid item xs> 
+                            <TextField required id="guildNameInput" label="길드명" variant="standard" sx={{ mr: 1 }} />
+                        </Grid>
+                    </Grid>
+
+
+                    <Grid container direction='row' alignItems='center' justify='center' style={{width:'100%', textAlign:'center'}} sx={{ mt: 1 }}>
+                        <Grid item xs>
+                        {/* 1차 직업 선택 창 test */}
+                            <FormControl variant="standard" required id="test1" className="main-class-selector" sx={{ m: 1 }} >
+                                <InputLabel id="main-class-select">1차</InputLabel>
+                                <Select
+                                    defaultValue="male_ghost_knight"
+                                    id="mainClassSelect"
+                                    label="mainClassSelect"
+                                    value={userMainClass}
+                                    onChange={mainClassSelectHandler}
+                                >
+
+                                    {DnfClass && DnfClass.mainClass.map((mainClass, index) => {
+                                        return (
+                                            <MenuItem key={index+" "+ mainClass} value={mainClass.value}>{mainClass.name}</MenuItem>
+                                        )
+                                    })}
+                                </Select>
+                            </FormControl>
+                        </Grid>
+                        
+                        <Grid item xs>
+                            {/* 2차 직업 선택 창 test */}
+                            <FormControl variant="standard" required className="sub-class-selector" sx={{ m: 1 }} >
+                                {<InputLabel id="sub-class-select">2차</InputLabel>}
+                                <Select
+                                    value={userSubClass}
+                                    id="subClassSelect"
+                                    label="subClassSelect"
+                                    onChange={subClassSelectHandler}
+                                >
+                                    {DnfClass && DnfClass[userMainClass].map((subClass, index) => {
+                                        return (
+                                            <MenuItem key={index + " " + subClass.name} value={subClass.value}>{subClass.name}</MenuItem>
+                                        )
+                                    })}
+                                </Select>
+                            </FormControl>
+                        </Grid>
+                        <Grid item xs>
+                            <TextField id="characterNoteInput" placeholder='속강 및 장비셋팅' label="비고" variant="standard" sx={{ mr: 1}} />
+                        </Grid>
+                    </Grid>
+
                 </Grid>
 
-                <Grid item sx={{ display: "flex", flexDirection: "row", justifyContent: "center", alignItems: "center", alignContent: "space-between" }}>
-                    {/* 1차 직업 선택 창 test */}
-                    <FormControl variant="standard" required id="test1" className="main-class-selector" sx={{ m: 1, minWidth: 70 }} size="small">
-                        <InputLabel id="main-class-select">
-                            1차
-                        </InputLabel>
-                        <Select
-                            defaultValue="male_ghost_knight"
-                            id="mainClassSelect"
-                            label="mainClassSelect"
-                            value={userMainClass}
-                            onChange={mainClassSelectHandler}
-                        >
-
-                            {DnfClass && DnfClass.mainClass.map((mainClass, index) => {
-                                return (
-                                    <MenuItem key={index+" "+ mainClass} value={mainClass.value}>{mainClass.name}</MenuItem>
-                                )
-                            })}
-                        </Select>
-                    </FormControl>
-
-                    {/* 2차 직업 선택 창 test */}
-                    <FormControl variant="standard" required className="sub-class-selector" sx={{ m: 1, minWidth: 80 }} size="small">
-                        <InputLabel id="sub-class-select">2차</InputLabel>
-                        <Select
-                            value={userSubClass}
-                            id="subClassSelect"
-                            label="subClassSelect"
-                            onChange={subClassSelectHandler}
-                        >
-                            {DnfClass && DnfClass[userMainClass].map((subClass, index) => {
-                                return (
-                                    <MenuItem key={index + " " + subClass.name} value={subClass.value}>{subClass.name}</MenuItem>
-                                )
-                            })}
-                        </Select>
-                    </FormControl>
-                    <TextField id="characterNoteInput" placeholder='속강 및 장비셋팅' label="비고" variant="standard" sx={{ mr: 1, minWidth: 120 }} />
-                </Grid>
-                <Grid>
-                <Button variant="contained" color="success" onClick={addCharacterHandler}>추가</Button>
+                <Grid sx={{ mt: 2 }}>
+                    <Button variant="contained" color="success" onClick={addCharacterHandler}>추가</Button>
                 </Grid>
                 
             </Grid>
-            
-
-        </Grid>
+            </React.Fragment>
     )
 }
 
