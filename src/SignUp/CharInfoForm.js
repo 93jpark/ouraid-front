@@ -4,6 +4,7 @@ import TextField from '@mui/material/TextField';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
+import Container from '@mui/material/Container';
 import Select from '@mui/material/Select';
 import Box from '@mui/material/Box';
 import DnfClass from '../DnfClass';
@@ -98,29 +99,21 @@ function CharInfoForm({ charCount, classSelectHandler, addUserCharactersHandler 
     return (
         <React.Fragment>
             {/* 캐릭터 정보 입력창 */}
-            <Grid container p={1} mt={2} sx={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", alignContent: "space-between", border: '1px dashed lightgrey'}} >
+            <Container maxWidth="lg" sx={{border: '1px dashed lightgrey'}}>
 
-                <Grid item>
-
-                    <Grid container direction='row' alignItems='center' style={{width:'100%', textAlign:'center' }}>
-                        <Grid item xs>
-                            <TextField required id="characterNameInput" label="캐릭명" variant="standard" sx={{ mr: 1 }} />
-                        </Grid>
-                        <Grid item xs>
-                            <TextField required id="abilityInput" label="항마" variant="standard" sx={{ mr: 1 }} type="number"
+                <Grid container sx={{ display: "flex", flexDirection: "row",  alignItems: "center", justifyContent: "center"}}>
+                    {/* 캐릭명, 항마, 길드명 입력창 */}
+                    <Grid item xs={12} sm={5} md={5} lg={5} sx={{ display: "flex", flexDirection: "row",  alignItems: "center", justifyContent: "center"}} >
+                            <TextField required id="characterNameInput" label="캐릭명" variant="standard" sx={{ mr: 1 , maxWidth: 120  }} />
+                            <TextField required id="abilityInput" label="항마" variant="standard" sx={{ mr: 1, maxWidth: 50 }} type="number"
                                 inputProps={{ inputMode: 'decimal', step: "0.1", pattern: '[0-9].[0-9]' }} />
-                            
-                        </Grid>
-                        <Grid item xs> 
-                            <TextField required id="guildNameInput" label="길드명" variant="standard" sx={{ mr: 1 }} />
-                        </Grid>
+                            <TextField required id="guildNameInput" label="길드명" variant="standard" sx={{ maxWidth: 120 }} />
                     </Grid>
 
-
-                    <Grid container direction='row' alignItems='center' justify='center' style={{width:'100%', textAlign:'center'}} sx={{ mt: 1 }}>
-                        <Grid item xs>
+                    <Grid item xs={12} sm={5} md={5} lg={5} sx={{ display: "flex", flexDirection: "row",  alignItems: "center", justifyContent: "center"}}>
+                        <Grid >
                         {/* 1차 직업 선택 창 test */}
-                            <FormControl variant="standard" required id="test1" className="main-class-selector" sx={{ m: 1 }} >
+                            <FormControl variant="standard" required id="test1" className="main-class-selector" sx={{ m: 1, maxWidth: 120 }} >
                                 <InputLabel id="main-class-select">1차</InputLabel>
                                 <Select
                                     defaultValue="male_ghost_knight"
@@ -139,9 +132,9 @@ function CharInfoForm({ charCount, classSelectHandler, addUserCharactersHandler 
                             </FormControl>
                         </Grid>
                         
-                        <Grid item xs>
+                        <Grid >
                             {/* 2차 직업 선택 창 test */}
-                            <FormControl variant="standard" required className="sub-class-selector" sx={{ m: 1 }} >
+                            <FormControl variant="standard" required className="sub-class-selector" sx={{ m: 1, maxWidth: 100 }} >
                                 {<InputLabel id="sub-class-select">2차</InputLabel>}
                                 <Select
                                     value={userSubClass}
@@ -157,18 +150,18 @@ function CharInfoForm({ charCount, classSelectHandler, addUserCharactersHandler 
                                 </Select>
                             </FormControl>
                         </Grid>
-                        <Grid item xs>
-                            <TextField id="characterNoteInput" placeholder='속강 및 장비셋팅' label="비고" variant="standard" sx={{ mr: 1}} />
+                        <Grid >
+                            <TextField id="characterNoteInput" placeholder='속강 및 장비셋팅' label="비고" variant="standard" sx={{ mr: 1, maxWidth: 120}} />
                         </Grid>
                     </Grid>
 
-                </Grid>
+                    <Grid item xs={12} sm={2} md={2} lg={2} sx={{ p: 1, display:'flex', flexDirection: "row",  alignItems: "center", justifyContent: "center"}}>
+                        <Button variant="contained" color="success" onClick={addCharacterHandler}>추가</Button>
+                    </Grid>
 
-                <Grid sx={{ mt: 2 }}>
-                    <Button variant="contained" color="success" onClick={addCharacterHandler}>추가</Button>
                 </Grid>
-                
-            </Grid>
+            </Container>
+            {/*</Grid>*/}
             </React.Fragment>
     )
 }
